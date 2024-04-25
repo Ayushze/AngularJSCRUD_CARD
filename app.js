@@ -144,42 +144,88 @@ app.controller(
   }
 );
 
+// app.controller(
+//   "ContactListController",
+//   function (
+//     $scope,
+//     $rootScope,
+//     $location,
+//     UserService,
+//     AuthService,
+//     $uibModal
+//   ) {
+//     $scope.contacts = UserService.getCurrentUserContacts();
+//     let modalInstance;
+
+//     $scope.logOut = function () {
+//       AuthService.logOut();
+//       $location.path("/sign-in");
+//     };
+
+//     $scope.editContact = function (contact) {
+//       UserService.setCurrentContact(contact);
+//       $location.path("/add-edit-contact");
+//     };
+
+//     $scope.deleteContact = function (contact) {
+//       UserService.deleteContact(contact);
+//     };
+
+//     $scope.exportData = function () {
+//       alasql('SELECT * INTO XLSX("contact.xlsx",{headers:true}) FROM ?', [
+//         UserService.getCurrentUserContacts(),
+//       ]);
+//     };
+
+//     $scope.openModal = function (contact) {
+//       if (modalInstance) {
+//         modalInstance.dismiss("cancel");
+//       }
+
+//       modalInstance = $uibModal.open({
+//         templateUrl: "contact-details-modal.html",
+//         controller: "ContactDetailsModalController",
+//         resolve: {
+//           contact: function () {
+//             return contact;
+//           },
+//         },
+//       });
+
+//       modalInstance.result.then(
+//         function (result) {},
+//         function () {}
+//       );
+//     };
+
+//     $rootScope.$on("logout", function () {
+//       if (modalInstance) {
+//         modalInstance.dismiss("logout");
+//       }
+//     });
+//   }
+// );
+
 app.controller(
   "ContactListController",
   function (
     $scope,
-    $rootScope,
     $location,
     UserService,
     AuthService,
-    $uibModal
+    $uibModal,
+    $rootScope
   ) {
     $scope.contacts = UserService.getCurrentUserContacts();
-    let modalInstance;
+    let modalInstance; // Variable to store the current modal instance
 
-    $scope.logOut = function () {
-      AuthService.logOut();
-      $location.path("/sign-in");
-    };
-
-    $scope.editContact = function (contact) {
-      UserService.setCurrentContact(contact);
-      $location.path("/add-edit-contact");
-    };
-
-    $scope.deleteContact = function (contact) {
-      UserService.deleteContact(contact);
-    };
-
-    $scope.exportData = function () {
-      alasql('SELECT * INTO XLSX("contact.xlsx",{headers:true}) FROM ?', [
-        UserService.getCurrentUserContacts(),
-      ]);
-    };
+    $rootScope.$on("$routeChangeSuccess", function () {
+      $scope.contacts = UserService.getCurrentUserContacts();
+    });
 
     $scope.openModal = function (contact) {
       if (modalInstance) {
-        modalInstance.dismiss("cancel");
+        modalInstance.dismiss('cancel');
       }
 
       modalInstance = $uibModal.open({
@@ -193,16 +239,48 @@ app.controller(
       });
 
       modalInstance.result.then(
-        function (result) {},
-        function () {}
+        function (result) {
+          // Handle modal close if needed
+        },
+        function () {
+          // Handle modal dismissal if needed
+        }
       );
     };
 
-    $rootScope.$on("logout", function () {
+    $scope.closeModal = function () {
       if (modalInstance) {
-        modalInstance.dismiss("logout");
+        modalInstance.dismiss('cancel');
       }
-    });
+    };
+
+    $scope.logOut = function () {
+      AuthService.logOut();
+      $location.path("/sign-in");
+      $scope.closeModal();
+    };
+
+    $scope.editContact = function (contact) {
+      UserService.setCurrentContact(contact);
+      $location.path("/add-edit-contact");
+      $scope.closeModal();
+    };
+
+    $scope.deleteContact = function (contact) {
+      UserService.deleteContact(contact);
+      $scope.closeModal();
+    };
+
+    $scope.exportData = function () {
+      alasql('SELECT * INTO XLSX("contact.xlsx",{headers:true}) FROM ?', [
+        UserService.getCurrentUserContacts(),
+      ]);
+      $scope.closeModal();
+    };
+
+    $scope.closeModalOnOtherButtonClick = function () {
+      $scope.closeModal();
+    };
   }
 );
 
