@@ -217,7 +217,7 @@ app.controller(
     $rootScope
   ) {
     $scope.contacts = UserService.getCurrentUserContacts();
-    let modalInstance; // Variable to store the current modal instance
+    let modalInstance;
 
     $rootScope.$on("$routeChangeSuccess", function () {
       $scope.contacts = UserService.getCurrentUserContacts();
@@ -297,7 +297,7 @@ app.controller(
 
 app.controller(
   "AddEditContactController",
-  function ($scope, $location, UserService, AuthService) {
+  function ($scope, $location, UserService, AuthService, $uibModal) {
     $scope.contact = {};
     $scope.editing = false;
 
@@ -311,17 +311,20 @@ app.controller(
     $scope.saveContact = function () {
       UserService.saveContact($scope.contact, $scope.editing);
       $location.path("/contact-list");
+      $scope.closeModal();
     };
 
     $scope.editContact = function (contact) {
       $scope.contact = angular.copy(contact);
       $scope.editing = true;
       $location.path("/add-edit-contact").search({ id: contact.id });
+      $scope.closeModal(); 
     };
 
     $scope.logOut = function () {
       AuthService.logOut();
       $location.path("/sign-in");
+      $scope.closeModal();
     };
 
     $scope.setImage = function (element) {
@@ -332,6 +335,12 @@ app.controller(
         });
       };
       reader.readAsDataURL(element.files[0]);
+    };
+
+    $scope.closeModal = function () {
+      if ($scope.$resolve.$uibModalInstance) {
+        $scope.$resolve.$uibModalInstance.dismiss("cancel");
+      }
     };
   }
 );
