@@ -146,7 +146,14 @@ app.controller(
 
 app.controller(
   "ContactListController",
-  function ($scope, $rootScope, $location, UserService, AuthService, $uibModal) {
+  function (
+    $scope,
+    $rootScope,
+    $location,
+    UserService,
+    AuthService,
+    $uibModal
+  ) {
     $scope.contacts = UserService.getCurrentUserContacts();
     let modalInstance;
 
@@ -172,7 +179,7 @@ app.controller(
 
     $scope.openModal = function (contact) {
       if (modalInstance) {
-        modalInstance.dismiss('cancel');
+        modalInstance.dismiss("cancel");
       }
 
       modalInstance = $uibModal.open({
@@ -186,16 +193,14 @@ app.controller(
       });
 
       modalInstance.result.then(
-        function (result) {
-        },
-        function () {
-        }
+        function (result) {},
+        function () {}
       );
     };
 
-    $rootScope.$on('logout', function() {
+    $rootScope.$on("logout", function () {
       if (modalInstance) {
-        modalInstance.dismiss('logout');
+        modalInstance.dismiss("logout");
       }
     });
   }
@@ -362,7 +367,7 @@ app.service("AuthService", function ($rootScope, $location) {
     logOut: function () {
       loggedIn = false;
       localStorage.setItem("loggedIn", "false");
-      $rootScope.$broadcast('logout');
+      $rootScope.$broadcast("logout");
     },
     requireLogin: function () {
       if (!loggedIn) {

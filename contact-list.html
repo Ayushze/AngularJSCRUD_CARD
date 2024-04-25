@@ -1,37 +1,5 @@
-<!-- <div ng-controller="ContactListController">
-  <button ng-click="exportData()">Export</button>
-  <h2>Contact List</h2>
-<table border="2px">
-  <thead>
-    <tr>
-      <td>Name</td>
-      <td>Email</td>
-      <td>Phone</td>
-      <td style="width: 50px;">Image</td> 
-      <td>Action</td>
-    </tr>
-  </thead>
-  <tbody>
-    <tr ng-repeat="contact in contacts">
-      <td>{{ contact.name }}</td>
-      <td>{{ contact.email }}</td>
-      <td>{{ contact.phone }}</td>
-      <td style="width: 50px;"><img ng-src="{{ contact.image }}" style="max-width: 100%; height: auto; border-radius: 50%;"></td>
-</td>
-      <td>
-        <button ng-click="editContact(contact)">Edit</button>
-        <button ng-click="deleteContact(contact)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<a href="#!/add-edit-contact">Add New Contact</a>
-<hr />
-<hr />
-  <button ng-click="logOut()">Log Out</button> 
-</div>-->
 <div ng-controller="ContactListController">
-  <button ng-click="exportData()">Export</button>
+  <button class="btnExport" ng-click="exportData()">Export</button>
   <h2>Contact List</h2>
   <div class="contact-grid">
     <div
@@ -41,9 +9,8 @@
       contact="contact"
     ></div>
   </div>
-  <a href="#!/add-edit-contact">Add New Contact</a>
+  <a style="color: whitesmoke;" href="#!/add-edit-contact">Add New Contact</a>
   <hr />
   <hr />
-  <button ng-click="logOut()">Log Out</button>
+  <button class="btnLogOut" ng-click="logOut()">Log Out</button>
 </div>
-
